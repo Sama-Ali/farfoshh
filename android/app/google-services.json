@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "11056242158",
+    "project_id": "farfosh2002",
+    "storage_bucket": "farfosh2002.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11056242158:android:3b6804e24b02654d0902ff",
+        "android_client_info": {
+          "package_name": "com.example.farfoshmodi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByiBt1_nVmPMuENxxGniziwUAXeU_wLj0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
