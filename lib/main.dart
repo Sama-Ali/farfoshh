@@ -1,3 +1,4 @@
+import 'package:farfoshmodi/screens/signup_screen.dart';
 import 'package:farfoshmodi/screens/welcome_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,9 @@ class MyApp extends StatelessWidget {
         webScreenLayout: WebScreenLayout(),
       ),*/
 
-      home: WelcomeScreen(),
+      // home: WelcomeScreen(),
+      // home: CreateAccountPage(),
+      home: LoginScreen(),
     );
   }
 }

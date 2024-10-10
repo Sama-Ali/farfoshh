@@ -1,7 +1,9 @@
+import 'dart:typed_data';
 import 'package:farfoshmodi/resources/auth_method.dart';
 import 'package:flutter/material.dart';
 import 'package:farfoshmodi/widgets/text_field_input.dart';
-import 'package:farfoshmodi/resources/auth_method.dart';
+import 'package:farfoshmodi/Utils/utils.dart';
+import 'package:image_picker/image_picker.dart'; //for pick image
 
 void main() {
   runApp(MaterialApp(
@@ -20,6 +22,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _birthDateController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  Uint8List? _image;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -29,6 +33,30 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     _birthDateController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = im;
+    });
+  }
+
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethod().signUpUser(
+        username: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        file: _image!);
+    setState(() {
+      _isLoading = false;
+    });
+    if (res != "!تم") {
+      showSnackBar(res, context);
+    }
   }
 
   @override
@@ -47,22 +75,31 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.grey.shade300,
-                        child: Icon(
-                          Icons.person,
-                          size: 60,
-                          color: Colors.blueGrey.shade800,
-                        ),
-                      ),
+                      _image != null
+                          ? CircleAvatar(
+                              radius: 50,
+                              backgroundImage: MemoryImage(_image!),
+                            )
+                          : const CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Color(0xFFE0E0E0),
+                              child: Icon(
+                                Icons.person,
+                                size: 60,
+                                color: Color(0xFF37474F),
+                              ),
+                            ),
+                      // Make the camera icon clickable
                       Positioned(
                         bottom: 5,
                         right: 5,
-                        child: Icon(
-                          Icons.camera_alt,
-                          color: Colors.black,
-                          size: 24,
+                        child: GestureDetector(
+                          onTap: selectImage,
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.black,
+                            size: 24,
+                          ),
                         ),
                       ),
                     ],
@@ -71,7 +108,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   // Name Field
                   TextFieldInput(
                     textEditingController: _nameController,
-                    labelText: 'الاسم',
+                    labelText: 'اسم المستخدم',
                     textInputType: TextInputType.text,
                   ),
                   SizedBox(height: 20),
@@ -83,12 +120,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   SizedBox(height: 20),
                   // Birth Date Field
-                  TextFieldInput(
-                    textEditingController: _birthDateController,
-                    labelText: 'تاريخ الميلاد',
-                    textInputType: TextInputType.datetime,
-                  ),
-                  SizedBox(height: 20),
+                  // TextFieldInput(
+                  //   textEditingController: _birthDateController,
+                  //   labelText: 'تاريخ الميلاد',
+                  //   textInputType: TextInputType.datetime,
+                  // ),
+                  // SizedBox(height: 20),
                   // Password Field
                   TextFieldInput(
                     textEditingController: _passwordController,
@@ -102,22 +139,24 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Implement create account logic here
-                      },
+                      onPressed: signUpUser,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueGrey.shade800,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
-                        'انشاء حساب',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: _isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : const Text(
+                              'انشاء حساب',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                 ],
