@@ -1,9 +1,14 @@
 import 'dart:typed_data';
 import 'package:farfoshmodi/resources/auth_method.dart';
+import 'package:farfoshmodi/responsive/mobile_screen_layout.dart';
+import 'package:farfoshmodi/responsive/responsive_layout_screen.dart';
+import 'package:farfoshmodi/responsive/web_screen_layout.dart';
+import 'package:farfoshmodi/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:farfoshmodi/widgets/text_field_input.dart';
 import 'package:farfoshmodi/Utils/utils.dart';
 import 'package:image_picker/image_picker.dart'; //for pick image
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -47,16 +52,41 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       _isLoading = true;
     });
     String res = await AuthMethod().signUpUser(
-        username: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        file: _image!);
+      username: _nameController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+      //     file: _image!
+    );
+    // ya
+    //String res = await AuthMethod().signUpUser(
+    //   username: "_nameController.text",
+    //   email: "hh@gmail.com",
+    //   password: "passwordController.text",
+    //   //
+    // );
     setState(() {
       _isLoading = false;
     });
     if (res != "!تم") {
       showSnackBar(res, context);
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
+        ),
+      );
     }
+  }
+
+  void navigatToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+    );
   }
 
   @override
@@ -151,12 +181,27 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               child: CircularProgressIndicator(),
                             )
                           : const Text(
-                              'انشاء حساب',
+                              'إنشاء حساب',
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.white,
                               ),
                             ),
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                  // "لدي حساب بالفعل" TextButton
+                  Center(
+                    child: TextButton(
+                      onPressed: navigatToLogin,
+                      child: Text(
+                        'لدي حساب بالفعل',
+                        style: GoogleFonts.cairo(
+                          fontSize: 13,
+                          color: Color(0xFF0D2240)
+                              .withOpacity(0.7), // Dark blue with opacity
+                        ),
+                      ),
                     ),
                   ),
                 ],

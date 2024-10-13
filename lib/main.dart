@@ -1,5 +1,9 @@
+import 'package:farfoshmodi/responsive/mobile_screen_layout.dart';
+import 'package:farfoshmodi/responsive/responsive_layout_screen.dart';
+import 'package:farfoshmodi/responsive/web_screen_layout.dart';
 import 'package:farfoshmodi/screens/signup_screen.dart';
 import 'package:farfoshmodi/screens/welcome_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,33 +38,42 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Instagram Clone',
-      /* theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.black,
-      ),*/
-
-      /* home: const ResponsiveLayout(
-        mobileScreenLayout: mobileScreenLayout(),
-        webScreenLayout: WebScreenLayout(),
-      ),*/
 
       // home: WelcomeScreen(),
       // home: CreateAccountPage(),
-      home: LoginScreen(),
+      // home: LoginScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasData) {
+              return const ResponsiveLayout(
+                mobileScreenLayout: MobileScreenLayout(),
+                webScreenLayout: WebScreenLayout(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                    '${snapshot.error}'), // can write any error message you want to appear
+              );
+            }
+          } //responsive
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            );
+          }
+          return LoginScreen();
+        },
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -86,7 +99,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
-    //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.

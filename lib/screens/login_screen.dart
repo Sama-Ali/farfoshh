@@ -1,3 +1,9 @@
+import 'package:farfoshmodi/Utils/utils.dart';
+import 'package:farfoshmodi/resources/auth_method.dart';
+import 'package:farfoshmodi/responsive/mobile_screen_layout.dart';
+import 'package:farfoshmodi/responsive/responsive_layout_screen.dart';
+import 'package:farfoshmodi/responsive/web_screen_layout.dart';
+import 'package:farfoshmodi/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:farfoshmodi/widgets/text_field_input.dart'; // Import reusable component
@@ -21,18 +27,37 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void loginUser() async {
     setState(() {
-      _isLoading = true; // Set loading state to true
+      _isLoading = true;
     });
 
-    // Simulate a login delay (you can replace this with your actual login logic)
-    await Future.delayed(Duration(seconds: 2));
-
-    // After login logic, set the loading state to false
+    // Call backend login method
+    String res = await AuthMethod().loginUser(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+    if (res == "!تم") {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
+        ),
+      );
+    } else {
+      showSnackBar(res, context);
+    }
     setState(() {
-      _isLoading = false;
+      _isLoading = false; // Set loading state to false
     });
+  }
 
-    // You could add the navigation or error handling here based on the result
+  void navigatToSignup() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CreateAccountPage(),
+      ),
+    );
   }
 
   @override
@@ -137,14 +162,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: screenHeight *
                     0.01), // Space between button and forgot password
 
-            // "نسيت كلمة المرور" TextButton
+            // "ليس لديك حساب؟ أنشئ حسابك" TextButton
             Center(
               child: TextButton(
-                onPressed: () {
-                  // Handle forgot password press
-                },
+                onPressed: navigatToSignup,
                 child: Text(
-                  'نسيت كلمة المرور',
+                  'ليس لديك حساب؟ أنشئ حسابك',
                   style: GoogleFonts.cairo(
                     fontSize: 13,
                     color: Color(0xFF0D2240)
