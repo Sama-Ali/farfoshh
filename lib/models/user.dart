@@ -1,3 +1,5 @@
+//this file built for keep user ingfo
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class User {
@@ -26,4 +28,18 @@ class User {
         'following': following,
         'photoUrl': photoUrl,
       };
+
+  //take a document snapshot and return user model
+  static User fromSnap(DocumentSnapshot snap) {
+    var snapshot = snap.data() as Map<String, dynamic>;
+
+    return User(
+      username: snapshot['username'],
+      uid: snapshot['uid'],
+      email: snapshot['email'],
+      followers: snapshot['followers'],
+      following: snapshot['following'],
+      photoUrl: snapshot['photoUrl'],
+    );
+  }
 }

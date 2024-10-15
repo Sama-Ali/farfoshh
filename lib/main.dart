@@ -37,12 +37,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Instagram Clone',
+      title: 'Farfosh',
 
       // home: WelcomeScreen(),
       // home: CreateAccountPage(),
       // home: LoginScreen(),
+
+      //remember user and get the appropriate state
       home: StreamBuilder(
+        //check for auth:
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
@@ -59,13 +62,14 @@ class MyApp extends StatelessWidget {
             }
           } //responsive
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(
                 color: Colors.white,
               ),
             );
           }
-          return LoginScreen();
+          //user has not been authinticated
+          return WelcomeScreen();
         },
       ),
     );

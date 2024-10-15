@@ -3,17 +3,27 @@ import 'package:farfoshmodi/resources/storage_method.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:typed_data'; //to be able to use Uint8List class
 import 'package:farfoshmodi/models/user.dart' as model;
+import 'package:flutter/material.dart';
 
 class AuthMethod {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<model.User> getUserDetails() async {
+    User currentUser =
+        _auth.currentUser!; //curreentuser provided by firebase auth
+
+    DocumentSnapshot snap =
+        await _firestore.collection('users').doc(currentUser.uid).get();
+
+    return model.User.fromSnap(snap);
+  }
 
   //sign up user
   Future<String> signUpUser(
       {required String email,
       required String password,
       required String username,
-      // required String bio,
       // required int age,
       // required List<String> hobbies,
       Uint8List? file //profile pic
@@ -23,9 +33,6 @@ class AuthMethod {
       if (email.isNotEmpty ||
           password.isNotEmpty ||
           username.isNotEmpty ||
-          // bio.isNotEmpty||
-          // age > 0 ||
-          // hobbies.isNotEmpty
           file != null) {
         //register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
@@ -38,7 +45,8 @@ class AuthMethod {
 
         // String photoUrl = await StorageMethod()
         //     .uploadImageToStorage('profilePics', file, false);
-        //add user to database
+
+        // add user to database
 
         model.User user = model.User(
           username: username,
