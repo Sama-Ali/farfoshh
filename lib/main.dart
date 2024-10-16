@@ -1,3 +1,4 @@
+import 'package:farfoshmodi/Providers/user_provider.dart';
 import 'package:farfoshmodi/responsive/mobile_screen_layout.dart';
 import 'package:farfoshmodi/responsive/responsive_layout_screen.dart';
 import 'package:farfoshmodi/responsive/web_screen_layout.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:farfoshmodi/screens/login_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() async // async for firebase
 {
@@ -35,44 +37,50 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Farfosh',
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => UserProvider(),
+          ),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Farfosh',
 
-      // home: WelcomeScreen(),
-      // home: CreateAccountPage(),
-      // home: LoginScreen(),
+          // home: WelcomeScreen(),
+          // home: CreateAccountPage(),
+          // home: LoginScreen(),
 
-      //remember user and get the appropriate state
-      home: StreamBuilder(
-        //check for auth:
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            if (snapshot.hasData) {
-              return const ResponsiveLayout(
-                mobileScreenLayout: MobileScreenLayout(),
-                webScreenLayout: WebScreenLayout(),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                    '${snapshot.error}'), // can write any error message you want to appear
-              );
-            }
-          } //responsive
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
-              ),
-            );
-          }
-          //user has not been authinticated
-          return WelcomeScreen();
-        },
-      ),
-    );
+          //remember user and get the appropriate state
+          home: StreamBuilder(
+            //check for auth:
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.hasData) {
+                  return const ResponsiveLayout(
+                    mobileScreenLayout: MobileScreenLayout(),
+                    webScreenLayout: WebScreenLayout(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                        '${snapshot.error}'), // can write any error message you want to appear
+                  );
+                }
+              } //responsive
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                );
+              }
+              //user has not been authinticated
+              return WelcomeScreen();
+            },
+          ),
+        ));
   }
 }
 
