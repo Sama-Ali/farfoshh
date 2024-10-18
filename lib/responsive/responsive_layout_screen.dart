@@ -1,6 +1,6 @@
 import 'package:farfoshmodi/Providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:farfoshmodi/Utils/dimention.dart';
+import 'package:farfoshmodi/Utils/global_variable.dart';
 import 'package:provider/provider.dart';
 
 class ResponsiveLayout extends StatefulWidget {
