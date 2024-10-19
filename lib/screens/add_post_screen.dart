@@ -1,14 +1,14 @@
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
 import 'package:farfoshmodi/resources/firestore_method.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:farfoshmodi/providers/user_provider.dart';
-import 'package:farfoshmodi/models/user.dart' as models;
 import 'package:farfoshmodi/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:farfoshmodi/models/user.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({super.key});
+  const AddPostScreen({Key? key}) : super(key: key);
 
   @override
   _AddPostScreenState createState() => _AddPostScreenState();
@@ -114,15 +114,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final models.User user = Provider.of<UserProvider>(context).getUser;
-
-    // Check if user data is available
-    // if (user == null) {
-    //   return const Center(
-    //     child:
-    //         CircularProgressIndicator(), // Loading indicator while fetching user data
-    //   );
-    // }
+    // final User user = Provider.of<UserProvider>(context).getUser;
 
     return _file == null
         ? Center(
@@ -147,33 +139,35 @@ class _AddPostScreenState extends State<AddPostScreen> {
               actions: [
                 TextButton(
                     onPressed: () => postImage(
-                          user.uid,
-                          user.username,
-                          user.photoUrl!,
+                          "uid",
+                          "// user.username",
+                          "// user.photoUrl!",
                         ),
                     child: const Text(
                       'Post',
                       style: TextStyle(
                           color: Color.fromRGBO(227, 14, 98, 100),
                           fontWeight: FontWeight.bold),
-                    ))
+                    )) // TextStyle // Text // TextButton
               ],
             ),
+            // POST FORM
             body: Column(
               children: <Widget>[
                 _isLoading
                     ? const LinearProgressIndicator()
-                    : const Padding(padding: EdgeInsets.only(top: 0.0)),
+                    : const Padding(
+                        padding: EdgeInsets.only(top: 0.0),
+                      ),
                 const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CircleAvatar(
-                      backgroundImage: user.photoUrl != null
-                          ? NetworkImage(user.photoUrl!)
-                          : AssetImage('assets/farfoshicon.png')
-                              as ImageProvider,
+                      backgroundImage: NetworkImage(
+                        "https://images.pexels.com/photos/28704265/pexels-photo-28704265/free-photo-of-parisian-cafe-window-display-with-wine-and-meat-specialties.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                      ),
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,
