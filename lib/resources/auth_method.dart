@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:farfoshmodi/resources/storage_method.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:typed_data'; //to be able to use Uint8List class
 import 'package:farfoshmodi/models/user.dart' as model;
-import 'package:flutter/material.dart';
 
 class AuthMethod {
   final FirebaseAuth _auth = FirebaseAuth.instance;

@@ -9,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:farfoshmodi/widgets/text_field_input.dart'; // Import reusable component
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }

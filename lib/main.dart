@@ -2,13 +2,11 @@ import 'package:farfoshmodi/Providers/user_provider.dart';
 import 'package:farfoshmodi/responsive/mobile_screen_layout.dart';
 import 'package:farfoshmodi/responsive/responsive_layout_screen.dart';
 import 'package:farfoshmodi/responsive/web_screen_layout.dart';
-import 'package:farfoshmodi/screens/signup_screen.dart';
 import 'package:farfoshmodi/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:farfoshmodi/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async // async for firebase
@@ -32,7 +30,7 @@ void main() async // async for firebase
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
