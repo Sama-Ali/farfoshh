@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:farfoshmodi/Providers/user_provider.dart';
 import 'package:farfoshmodi/resources/auth_method.dart';
 import 'package:farfoshmodi/responsive/mobile_screen_layout.dart';
 import 'package:farfoshmodi/responsive/responsive_layout_screen.dart';
@@ -9,6 +10,7 @@ import 'package:farfoshmodi/widgets/text_field_input.dart';
 import 'package:farfoshmodi/Utils/utils.dart';
 import 'package:image_picker/image_picker.dart'; //for pick image
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -78,6 +80,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     if (res != "!تم") {
       showSnackBar(res, context);
     } else {
+      // Wait for user data to be available before navigating
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const ResponsiveLayout(

@@ -80,15 +80,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final models.User? user = Provider.of<UserProvider>(context).getUser;
-
     // Check if user data is available
-    if (user == null) {
-      return const Center(
-        child:
-            CircularProgressIndicator(), // Loading indicator while fetching user data
-      );
-    }
 
     return _file == null
         ? Center(
@@ -130,12 +122,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: user.photoUrl != null
-                          ? NetworkImage(user.photoUrl!)
-                          : AssetImage('assets/farfoshicon.png')
-                              as ImageProvider,
+                      backgroundImage: NetworkImage(
+                          "https://images.pexels.com/photos/28704265/pexels-photo-28704265/free-photo-of-parisian-cafe-window-display-with-wine-and-meat-specialties.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"),
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,

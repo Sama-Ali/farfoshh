@@ -61,11 +61,6 @@ class AuthMethod {
 
         print(cred.user!.uid);
 
-        // Check if file is null
-        if (file == null) {
-          return "Please select an image.";
-        }
-
         // Upload profile image and get its URL
         String photoUrl = await StorageMethod()
             .uploadImageToStorage('profilePics', file, false);
@@ -87,9 +82,13 @@ class AuthMethod {
         await _firestore.collection('users').doc(cred.user!.uid).set(
               user.toJson(),
             );
+
+        // Add a short delay to ensure data is written
+        await Future.delayed(Duration(seconds: 1));
+
         res = "!تم";
       } else {
-        res = "جميع الحقو,,ل مطلوبة";
+        res = "جميع الحقول مطلوبة";
       }
     } catch (err) {
       res = err.toString();
