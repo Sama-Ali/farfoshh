@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:farfoshmodi/models/user.dart' as model;
 
 class WebScreenLayout extends StatefulWidget {
-  const WebScreenLayout({Key? key}) : super(key: key);
+  const WebScreenLayout({super.key});
 
   @override
   State<WebScreenLayout> createState() => _WebScreenLayoutState();

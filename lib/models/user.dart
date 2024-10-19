@@ -1,6 +1,5 @@
 //this file built for keep user ingfo
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class User {
   final String username;

@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:farfoshmodi/screens/login_screen.dart';
 
 class RegistrationScreen extends StatelessWidget {
+  const RegistrationScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Get the screen height and width to make the layout responsive

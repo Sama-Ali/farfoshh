@@ -61,11 +61,6 @@ class AuthMethod {
 
         print(cred.user!.uid);
 
-        // Check if file is null
-        if (file == null) {
-          return "Please select an image.";
-        }
-
         // Upload profile image and get its URL
         String photoUrl = await StorageMethod()
             .uploadImageToStorage('profilePics', file, false);

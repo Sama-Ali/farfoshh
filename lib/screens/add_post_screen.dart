@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:farfoshmodi/resources/firestore_method.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:farfoshmodi/providers/user_provider.dart';
 import 'package:farfoshmodi/models/user.dart' as models;
@@ -7,7 +8,7 @@ import 'package:farfoshmodi/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({Key? key}) : super(key: key);
+  const AddPostScreen({super.key});
 
   @override
   _AddPostScreenState createState() => _AddPostScreenState();
@@ -15,8 +16,41 @@ class AddPostScreen extends StatefulWidget {
 
 class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
-  bool isLoading = false;
+  bool _isLoading = false;
   final TextEditingController _descriptionController = TextEditingController();
+
+  void postImage(
+    String uid,
+    String username,
+    String profImage,
+  ) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      String res = await FirestoreMethod().uploadPost(
+        _descriptionController.text,
+        _file!,
+        uid,
+        username,
+        profImage,
+      );
+      if (res == "!تم") {
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar('Posted', context);
+        clearImage();
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(res, context);
+      }
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
 
   @override
   void initState() {
@@ -80,15 +114,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final models.User? user = Provider.of<UserProvider>(context).getUser;
+    final models.User user = Provider.of<UserProvider>(context).getUser;
 
     // Check if user data is available
-    if (user == null) {
-      return const Center(
-        child:
-            CircularProgressIndicator(), // Loading indicator while fetching user data
-      );
-    }
+    // if (user == null) {
+    //   return const Center(
+    //     child:
+    //         CircularProgressIndicator(), // Loading indicator while fetching user data
+    //   );
+    // }
 
     return _file == null
         ? Center(
@@ -112,7 +146,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
               centerTitle: false,
               actions: [
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () => postImage(
+                          user.uid,
+                          user.username,
+                          user.photoUrl!,
+                        ),
                     child: const Text(
                       'Post',
                       style: TextStyle(
@@ -123,7 +161,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             body: Column(
               children: <Widget>[
-                isLoading
+                _isLoading
                     ? const LinearProgressIndicator()
                     : const Padding(padding: EdgeInsets.only(top: 0.0)),
                 const Divider(),

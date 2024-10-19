@@ -17,6 +17,8 @@ void main() {
 }
 
 class CreateAccountPage extends StatefulWidget {
+  const CreateAccountPage({super.key});
+
   @override
   State<CreateAccountPage> createState() => _CreateAccountPageState();
 }
@@ -173,7 +175,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   SizedBox(height: 40),
                   // Create Account Button
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(

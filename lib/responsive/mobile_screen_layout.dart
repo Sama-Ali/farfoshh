@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MobileScreenLayout extends StatefulWidget {
-  const MobileScreenLayout({Key? key}) : super(key: key);
+  const MobileScreenLayout({super.key});
 
   @override
   State<MobileScreenLayout> createState() => _MobileScreenLayoutState();
@@ -50,7 +50,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           Positioned(
             bottom: 30, // Position the button higher from the bottom
             right: 20, // Right padding to align with the screen edge
-            child: Container(
+            child: SizedBox(
               width: 50, // Smaller width
               height: 50, // Smaller height
               child: FloatingActionButton(
@@ -60,14 +60,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                     MaterialPageRoute(builder: (context) => AddPostScreen()),
                   );
                 },
-                backgroundColor: Colors.white, // White background
+                backgroundColor: Colors.white,
+                elevation: 4, // White background
                 child: Icon(
                   Icons.add,
                   color:
                       const Color.fromRGBO(27, 37, 67, 0.612), // Black "+" icon
                   size: 24, // Smaller icon size
-                ),
-                elevation: 4, // Small shadow for a subtle effect
+                ), // Small shadow for a subtle effect
               ),
             ),
           ),
