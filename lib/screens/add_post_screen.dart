@@ -1,10 +1,8 @@
 import 'dart:typed_data';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:farfoshmodi/providers/user_provider.dart';
-import 'package:farfoshmodi/models/user.dart';
+import 'package:farfoshmodi/models/user.dart' as models;
 import 'package:farfoshmodi/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +17,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
   bool isLoading = false;
   final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Ensure the provider is called when the screen is loaded
+    Future.microtask(
+        () => Provider.of<UserProvider>(context, listen: false).refreshUser());
+  }
 
   _selectImage(BuildContext parentContext) async {
     return showDialog(
@@ -74,6 +80,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final models.User? user = Provider.of<UserProvider>(context).getUser;
+
+    // Check if user data is available
+    if (user == null) {
+      return const Center(
+        child:
+            CircularProgressIndicator(), // Loading indicator while fetching user data
+      );
+    }
+
     return _file == null
         ? Center(
             child: IconButton(
@@ -102,10 +118,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       style: TextStyle(
                           color: Color.fromRGBO(227, 14, 98, 100),
                           fontWeight: FontWeight.bold),
-                    )) // TextStyle // Text // TextButton
+                    ))
               ],
             ),
-            // POST FORM
             body: Column(
               children: <Widget>[
                 isLoading
@@ -117,9 +132,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        "https://images.pexels.com/photos/28704265/pexels-photo-28704265/free-photo-of-parisian-cafe-window-display-with-wine-and-meat-specialties.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                      ),
+                      backgroundImage: user.photoUrl != null
+                          ? NetworkImage(user.photoUrl!)
+                          : AssetImage('assets/farfoshicon.png')
+                              as ImageProvider,
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,

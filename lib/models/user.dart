@@ -8,7 +8,7 @@ class User {
   final String email;
   final List followers;
   final List following;
-  final String? photoUrl;
+  final String? photoUrl; // Make sure this is nullable
 
   const User({
     required this.username,
@@ -19,7 +19,7 @@ class User {
     this.photoUrl,
   });
 
-  //conver user to object
+  // Convert user to a map (JSON format)
   Map<String, dynamic> toJson() => {
         'username': username,
         'uid': uid,
@@ -29,7 +29,7 @@ class User {
         'photoUrl': photoUrl,
       };
 
-  //take a document snapshot and return user model
+  // Take a document snapshot and return user model
   static User fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
@@ -39,7 +39,8 @@ class User {
       email: snapshot['email'],
       followers: snapshot['followers'],
       following: snapshot['following'],
-      photoUrl: snapshot['photoUrl'],
+      photoUrl: snapshot['photoUrl'] ??
+          'https://images.pexels.com/photos/28704265/pexels-photo-28704265/free-photo-of-parisian-cafe-window-display-with-wine-and-meat-specialties.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load', // Provide a default value if null
     );
   }
 }

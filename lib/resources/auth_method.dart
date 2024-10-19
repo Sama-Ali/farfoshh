@@ -9,63 +9,87 @@ class AuthMethod {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // This function fetches the details of the currently logged-in user from Firestore
   Future<model.User> getUserDetails() async {
-    User currentUser =
-        _auth.currentUser!; //curreentuser provided by firebase auth
+    try {
+      User currentUser = _auth.currentUser!;
+      DocumentSnapshot snap =
+          await _firestore.collection('users').doc(currentUser.uid).get();
 
-    DocumentSnapshot snap =
-        await _firestore.collection('users').doc(currentUser.uid).get();
+      // Debug: Print the data retrieved
+      print('Data fetched: ${snap.data()}');
 
-    return model.User.fromSnap(snap);
+      // Check if the snapshot has data
+      if (snap.exists) {
+        return model.User.fromSnap(snap);
+      } else {
+        throw Exception('User document does not exist');
+      }
+    } on FirebaseException catch (e) {
+      if (e.code == 'permission-denied') {
+        print('User does not have permission to perform this action');
+      } else if (e.code == 'not-found') {
+        print('Document does not exist');
+      } else {
+        print('An unknown error occurred: ${e.message}');
+      }
+      rethrow; // Optionally rethrow the error after logging it
+    } catch (e) {
+      print('Error: $e');
+      rethrow; // Optionally rethrow the error after logging it
+    }
   }
 
   //sign up user
-  Future<String> signUpUser(
-      {required String email,
-      required String password,
-      required String username,
-      // required int age,
-      // required List<String> hobbies,
-      Uint8List? file //profile pic
-      }) async {
+  Future<String> signUpUser({
+    required String email,
+    required String password,
+    required String username,
+    Uint8List? file,
+  }) async {
     String res = "هناك خطأ في المعلومات";
     try {
-      if (email.isNotEmpty ||
-          password.isNotEmpty ||
-          username.isNotEmpty ||
+      if (email.isNotEmpty &&
+          password.isNotEmpty &&
+          username.isNotEmpty &&
           file != null) {
-        //register user
+        // Register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
-            //UserCredential cred: Stores user details & metadata.
-            email: email,
-            password: password);
+          email: email,
+          password: password,
+        );
 
         print(cred.user!.uid);
-        //cred is UserCredential object returned by Firebase after creating user
 
-        // String photoUrl = await StorageMethod()
-        //     .uploadImageToStorage('profilePics', file, false);
+        // Check if file is null
+        if (file == null) {
+          return "Please select an image.";
+        }
 
-        // add user to database
+        // Upload profile image and get its URL
+        String photoUrl = await StorageMethod()
+            .uploadImageToStorage('profilePics', file, false);
 
+        if (photoUrl.isEmpty) {
+          return "Failed to upload profile picture.";
+        }
+
+        // Add user to database
         model.User user = model.User(
           username: username,
           uid: cred.user!.uid,
           email: email,
           followers: [],
           following: [],
-          // photoUrl: photoUrl
+          photoUrl: photoUrl,
         );
+
         await _firestore.collection('users').doc(cred.user!.uid).set(
               user.toJson(),
             );
         res = "!تم";
-      }
-    } on FirebaseAuthException catch (err) {
-      if (err.code == 'invalid-email') {
-        res = 'أدخل ايميلك بشكل صحيح';
-      } else if (err.code == 'weak-password') {
-        res = 'كلمة السر يجب أن تكون 6 خانات على الأقل';
+      } else {
+        res = "جميع الحقو,,ل مطلوبة";
       }
     } catch (err) {
       res = err.toString();

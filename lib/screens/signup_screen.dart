@@ -48,25 +48,33 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   void signUpUser() async {
+    // Start loading indicator
     setState(() {
       _isLoading = true;
     });
+
+    // Ensure the image is not null before passing it to the method
+    if (_image == null) {
+      showSnackBar("Please select a profile picture", context);
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    // Call the signup method with the required parameters
     String res = await AuthMethod().signUpUser(
       username: _nameController.text,
       email: _emailController.text,
       password: _passwordController.text,
-      //     file: _image!
+      file: _image, // Pass the image file here
     );
-    // ya
-    //String res = await AuthMethod().signUpUser(
-    //   username: "_nameController.text",
-    //   email: "hh@gmail.com",
-    //   password: "passwordController.text",
-    //   //
-    // );
+
+    // Stop loading indicator
     setState(() {
       _isLoading = false;
     });
+
     if (res != "!تم") {
       showSnackBar(res, context);
     } else {
