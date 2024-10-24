@@ -46,31 +46,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             onPageChanged: onPageChanged,
             children: homeScreenItems,
           ),
-          // Custom Positioned Floating Action Button
-          Positioned(
-            bottom: 30, // Position the button higher from the bottom
-            right: 20, // Right padding to align with the screen edge
-            child: SizedBox(
-              width: 50, // Smaller width
-              height: 50, // Smaller height
-              child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddPostScreen()),
-                  );
-                },
-                backgroundColor: Colors.white,
-                elevation: 4, // White background
-                child: Icon(
-                  Icons.add,
-                  color:
-                      const Color.fromRGBO(27, 37, 67, 0.612), // Black "+" icon
-                  size: 24, // Smaller icon size
-                ), // Small shadow for a subtle effect
-              ),
-            ),
-          ),
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(
