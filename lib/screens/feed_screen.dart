@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farfoshmodi/screens/add_post_screen.dart';
 import 'package:farfoshmodi/widgets/post_card.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +44,27 @@ class _FeedScreenState extends State<FeedScreen> {
             ),
       body: Stack(
         children: [
-          // Add your main content here
-          const PostCard(),
+          // for backend:
+          StreamBuilder(
+            //StreamBuilder rebuild its UI with the new data
+            stream: FirebaseFirestore.instance
+                .collection('post')
+                .snapshots(), //.snapshots() provide real time changes in 'post' collection
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) =>
+                    PostCard(snap: snapshot.data!.docs[index].data()),
+              );
+            },
+          ),
           // Custom Positioned Floating Action Button
           Positioned(
             bottom: 30, // Position the button higher from the bottom

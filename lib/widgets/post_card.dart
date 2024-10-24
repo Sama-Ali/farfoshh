@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 const webScreenSize = 600;
 const mobileBackgroundColor = Colors.white;
@@ -7,23 +8,31 @@ const webBackgroundColor = Colors.grey;
 const primaryColor = Colors.black;
 const secondaryColor = const Color.fromRGBO(160, 160, 160, 100);
 
-class PostCard extends StatefulWidget {
-  const PostCard({
+// class PostCard extends StatefulWidget {
+//   final snap;
+//   const PostCard({
+//     Key? key,
+//     required this.snap,
+//   }) : super(key: key);
+
+//   @override
+//   State<PostCard> createState() => _PostCardState();
+// }
+
+class PostCard extends StatelessWidget {
+  final snap;
+  PostCard({
     Key? key,
+    required this.snap,
   }) : super(key: key);
 
-  @override
-  State<PostCard> createState() => _PostCardState();
-}
-
-class _PostCardState extends State<PostCard> {
   int commentLen = 0;
   bool isLikeAnimating = false;
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +61,7 @@ class _PostCardState extends State<PostCard> {
               children: <Widget>[
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage("assets/profile_pic.png"),
+                  backgroundImage: NetworkImage(snap['profImage']),
                 ),
                 Expanded(
                   child: Padding(
@@ -64,7 +73,7 @@ class _PostCardState extends State<PostCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'username',
+                          snap['username'],
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -110,7 +119,7 @@ class _PostCardState extends State<PostCard> {
             height: MediaQuery.of(context).size.height * 0.35,
             width: double.infinity,
             child: Image.network(
-              'https://images.pexels.com/photos/28704265/pexels-photo-28704265/free-photo-of-parisian-cafe-window-display-with-wine-and-meat-specialties.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+              snap['postUrl'],
               fit: BoxFit.cover,
             ), // Image.network
           ), // Si
@@ -149,7 +158,7 @@ class _PostCardState extends State<PostCard> {
                         .titleSmall!
                         .copyWith(fontWeight: FontWeight.w800),
                     child: Text(
-                      '1,231 likes',
+                      '${snap['likes'].length} likes',
                       style: Theme.of(context).textTheme.bodyMedium,
                     )),
                 Container(
@@ -162,13 +171,13 @@ class _PostCardState extends State<PostCard> {
                       style: const TextStyle(color: primaryColor),
                       children: [
                         TextSpan(
-                          text: 'username',
+                          text: snap['username'],
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text: '  This is discribtion',
+                          text: snap['description'],
                         ),
                       ],
                     ),
@@ -188,6 +197,15 @@ class _PostCardState extends State<PostCard> {
                     onTap: () {}),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    DateFormat.yMMMd().format(
+                      snap['datePublished'].toDate(),
+                    ),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: secondaryColor,
+                    ),
+                  ),
                 ),
               ],
             ),
