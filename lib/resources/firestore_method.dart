@@ -4,6 +4,7 @@ import 'package:farfoshmodi/models/post.dart';
 import 'package:farfoshmodi/resources/storage_method.dart';
 import 'dart:typed_data';
 import 'package:uuid/uuid.dart';
+import 'package:flutter/foundation.dart';
 
 class FirestoreMethod {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

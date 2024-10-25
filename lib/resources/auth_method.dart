@@ -10,34 +10,43 @@ class AuthMethod {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // This function fetches the details of the currently logged-in user from Firestore
+  // Future<model.User> getUserDetails() async {
+  //   try {
+  //     User currentUser = _auth.currentUser!;
+  //     DocumentSnapshot snap =
+  //         await _firestore.collection('users').doc(currentUser.uid).get();
+
+  //     // Debug: Print the data retrieved
+  //     print('Data fetched: ${snap.data()}');
+
+  //     // Check if the snapshot has data
+  //     if (snap.exists) {
+  //       return model.User.fromSnap(snap);
+  //     } else {
+  //       throw Exception('User document does not exist');
+  //     }
+  //   } on FirebaseException catch (e) {
+  //     if (e.code == 'permission-denied') {
+  //       print('User does not have permission to perform this action');
+  //     } else if (e.code == 'not-found') {
+  //       print('Document does not exist');
+  //     } else {
+  //       print('An unknown error occurred: ${e.message}');
+  //     }
+  //     rethrow; // Optionally rethrow the error after logging it
+  //   } catch (e) {
+  //     print('Error: $e');
+  //     rethrow; // Optionally rethrow the error after logging it
+  //   }
+  // }
+
   Future<model.User> getUserDetails() async {
-    try {
-      User currentUser = _auth.currentUser!;
-      DocumentSnapshot snap =
-          await _firestore.collection('users').doc(currentUser.uid).get();
+    User currentUser = _auth.currentUser!;
 
-      // Debug: Print the data retrieved
-      print('Data fetched: ${snap.data()}');
+    DocumentSnapshot documentSnapshot =
+        await _firestore.collection('users').doc(currentUser.uid).get();
 
-      // Check if the snapshot has data
-      if (snap.exists) {
-        return model.User.fromSnap(snap);
-      } else {
-        throw Exception('User document does not exist');
-      }
-    } on FirebaseException catch (e) {
-      if (e.code == 'permission-denied') {
-        print('User does not have permission to perform this action');
-      } else if (e.code == 'not-found') {
-        print('Document does not exist');
-      } else {
-        print('An unknown error occurred: ${e.message}');
-      }
-      rethrow; // Optionally rethrow the error after logging it
-    } catch (e) {
-      print('Error: $e');
-      rethrow; // Optionally rethrow the error after logging it
-    }
+    return model.User.fromSnap(documentSnapshot);
   }
 
   //sign up user

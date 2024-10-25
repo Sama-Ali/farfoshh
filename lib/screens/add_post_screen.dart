@@ -19,6 +19,46 @@ class _AddPostScreenState extends State<AddPostScreen> {
   bool _isLoading = false;
   final TextEditingController _descriptionController = TextEditingController();
 
+  _selectImage(BuildContext parentContext) async {
+    return showDialog(
+      context: parentContext,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('إضافة منشور'),
+          children: <Widget>[
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('التقط صورة'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  Uint8List file = await pickImage(ImageSource.camera);
+                  setState(() {
+                    _file = file;
+                  });
+                }),
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('من معرض الصور'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  Uint8List file = await pickImage(ImageSource.gallery);
+                  setState(() {
+                    _file = file;
+                  });
+                }),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text("إلغاء"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   void postImage(
     String uid,
     String username,
@@ -39,7 +79,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         setState(() {
           _isLoading = false;
         });
-        showSnackBar('Posted', context);
+        showSnackBar('تم مشاركة المنشور', context);
         clearImage();
       } else {
         setState(() {
@@ -47,58 +87,60 @@ class _AddPostScreenState extends State<AddPostScreen> {
         });
         showSnackBar(res, context);
       }
-    } catch (e) {
-      showSnackBar(e.toString(), context);
+    } catch (err) {
+      setState(() {
+        _isLoading = false;
+      });
+      showSnackBar(
+        err.toString(),
+        context,
+      );
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // Ensure the provider is called when the screen is loaded
-    Future.microtask(
-        () => Provider.of<UserProvider>(context, listen: false).refreshUser());
-  }
+  // try {
+  //     // upload to storage and db
+  //     String res = await FireStoreMethods().uploadPost(
+  //       _descriptionController.text,
+  //       _file!,
+  //       uid,
+  //       username,
+  //       profImage,
+  //     );
+  //     if (res == "!تم") {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //       if (context.mounted) {
+  //         showSnackBar(
+  //           'تم مشاركة المنشور',
+  //           context,
+  //         );
+  //       }
+  //       clearImage();
+  //     } else {
+  //       if (context.mounted) {
+  //         showSnackBar(res, context);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     showSnackBar(
+  //       err.toString(),
+  //       context,
+  //     );
+  //   }
+  // }
 
-  _selectImage(BuildContext parentContext) async {
-    return showDialog(
-      context: parentContext,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: const Text('Create a Post'),
-          children: <Widget>[
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Take a photo'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(ImageSource.camera);
-                  setState(() {
-                    _file = file;
-                  });
-                }),
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose from Gallery'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.gallery);
-                  setState(() {
-                    _file = file;
-                  });
-                }),
-            SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Ensure the provider is called when the screen is loaded
+  //   Future.microtask(
+  //       () => Provider.of<UserProvider>(context, listen: false).refreshUser());
+  // }
 
   void clearImage() {
     setState(() {
@@ -114,7 +156,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final User user = Provider.of<UserProvider>(context).getUser;
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
 
     return _file == null
         ? Center(
@@ -133,18 +175,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 onPressed: clearImage,
               ),
               title: const Text(
-                'Post to',
+                'نشر',
               ),
               centerTitle: false,
-              actions: [
+              actions: <Widget>[
                 TextButton(
                     onPressed: () => postImage(
-                          "uid",
-                          "// user.username",
-                          "// user.photoUrl!",
+                          userProvider.getUser.uid,
+                          userProvider.getUser.username,
+                          userProvider.getUser.photoUrl,
                         ),
                     child: const Text(
-                      'Post',
+                      'نشر',
                       style: TextStyle(
                           color: Color.fromRGBO(227, 14, 98, 100),
                           fontWeight: FontWeight.bold),
@@ -166,7 +208,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   children: [
                     CircleAvatar(
                       backgroundImage: NetworkImage(
-                        "https://images.pexels.com/photos/28704265/pexels-photo-28704265/free-photo-of-parisian-cafe-window-display-with-wine-and-meat-specialties.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                        userProvider.getUser.photoUrl,
                       ),
                     ),
                     SizedBox(

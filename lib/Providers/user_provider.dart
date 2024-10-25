@@ -2,6 +2,7 @@
 import 'package:farfoshmodi/models/user.dart';
 import 'package:farfoshmodi/resources/auth_method.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 class UserProvider with ChangeNotifier {
   //do not forget, should be private
@@ -14,6 +15,6 @@ class UserProvider with ChangeNotifier {
   Future<void> refreshUser() async {
     User user = await _authMethod.getUserDetails();
     _user = user;
-    notifyListeners(); //update all listenerس
+    notifyListeners(); //update all listener
   }
 }

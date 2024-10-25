@@ -48,7 +48,7 @@ class _FeedScreenState extends State<FeedScreen> {
           StreamBuilder(
             //StreamBuilder rebuild its UI with the new data
             stream: FirebaseFirestore.instance
-                .collection('post')
+                .collection('posts')
                 .snapshots(), //.snapshots() provide real time changes in 'post' collection
             builder: (context,
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -60,8 +60,9 @@ class _FeedScreenState extends State<FeedScreen> {
 
               return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) =>
-                    PostCard(snap: snapshot.data!.docs[index].data()),
+                itemBuilder: (context, index) => PostCard(
+                  snap: snapshot.data!.docs[index].data(),
+                ),
               );
             },
           ),

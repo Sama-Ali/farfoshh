@@ -7,7 +7,7 @@ class User {
   final String email;
   final List followers;
   final List following;
-  final String? photoUrl; // Make sure this is nullable
+  final String photoUrl; // Make sure this is nullable
 
   const User({
     required this.username,
@@ -15,7 +15,7 @@ class User {
     required this.email,
     required this.followers,
     required this.following,
-    this.photoUrl,
+    required this.photoUrl,
   });
 
   // Convert user to a map (JSON format)

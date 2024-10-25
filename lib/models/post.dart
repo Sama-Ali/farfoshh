@@ -25,14 +25,14 @@ class Post {
 
   //conver user to object
   Map<String, dynamic> toJson() => {
-        'description': description,
-        'uid': uid,
-        'username': username,
-        'postId': postId,
-        'datePublished': datePublished,
+        "description": description,
+        "uid": uid,
+        "username": username,
+        "postId": postId,
+        "datePublished": datePublished,
         'postUrl': postUrl,
         'profImage': profImage,
-        'likes': likes,
+        "likes": likes,
       };
 
   //take a document snapshot and return user model
@@ -40,14 +40,14 @@ class Post {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return Post(
-      description: snapshot['description'],
-      uid: snapshot['uid'],
-      username: snapshot['username'],
-      postId: snapshot['postId'],
-      datePublished: snapshot['datePublished'],
+      description: snapshot["description"],
+      uid: snapshot["uid"],
+      username: snapshot["username"],
+      postId: snapshot["postId"],
+      datePublished: snapshot["datePublished"],
       postUrl: snapshot['postUrl'],
       profImage: snapshot['profImage'],
-      likes: snapshot['likes'],
+      likes: snapshot["likes"],
     );
   }
 }
