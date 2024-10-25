@@ -19,7 +19,7 @@ class FirestoreMethod {
     String res = "هناك خطأ";
     try {
       String photoUrl =
-          await StorageMethod().uploadImageToStorage('post', file, true);
+          await StorageMethod().uploadImageToStorage('posts', file, true);
       //using method provided by uuid package:
       //v1 using to create unique identefier based on the time
       String postId = const Uuid().v1();

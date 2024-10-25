@@ -8,17 +8,6 @@ const webBackgroundColor = Colors.grey;
 const primaryColor = Colors.black;
 const secondaryColor = const Color.fromRGBO(160, 160, 160, 100);
 
-// class PostCard extends StatefulWidget {
-//   final snap;
-//   const PostCard({
-//     Key? key,
-//     required this.snap,
-//   }) : super(key: key);
-
-//   @override
-//   State<PostCard> createState() => _PostCardState();
-// }
-
 class PostCard extends StatelessWidget {
   final snap;
   PostCard({
@@ -177,7 +166,7 @@ class PostCard extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: snap['description'],
+                          text: ' ${snap['description']}',
                         ),
                       ],
                     ),
