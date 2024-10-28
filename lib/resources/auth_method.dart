@@ -68,7 +68,7 @@ class AuthMethod {
           password: password,
         );
 
-        print(cred.user!.uid);
+        // print(cred.user!.uid);
 
         // Upload profile image and get its URL
         String photoUrl = await StorageMethod()

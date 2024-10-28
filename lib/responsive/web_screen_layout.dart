@@ -16,10 +16,15 @@ class WebScreenLayout extends StatefulWidget {
 class _WebScreenLayoutState extends State<WebScreenLayout> {
   @override
   Widget build(BuildContext context) {
-    model.User user = Provider.of<UserProvider>(context).getUser;
+    // UserProvider provider = Provider.of<UserProvider>(context);
+    // provider.refreshUser();
+    // model.User? user = provider.getUser;
+    // print("getting the user from web screeeeeeeeeeeen");
+    // print(user);
     return Scaffold(
       body: Center(
-        child: Text(user.username),
+        // child: Text(user!.username),
+        child: Text("user!.username"),
       ),
     );
   }

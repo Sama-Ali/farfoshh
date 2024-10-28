@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:farfoshmodi/Providers/user_provider.dart';
 import 'package:farfoshmodi/screens/add_post_screen.dart';
 import 'package:farfoshmodi/widgets/post_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 const webScreenSize = 600;
 const mobileBackgroundColor = Colors.white;
@@ -19,6 +21,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    print("**********in feedScreen");
 
     return Scaffold(
       backgroundColor:
@@ -75,11 +78,16 @@ class _FeedScreenState extends State<FeedScreen> {
               height: 50, // Smaller height
               child: FloatingActionButton(
                 onPressed: () {
+                  // final UserProvider userProvider =
+                  //     Provider.of<UserProvider>(context);
+                  print("in feedScreen");
+                  // print(userProvider.getUser);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AddPostScreen()),
                   );
                 },
+                // Navigator.push(context, AddPostScreen())},
                 backgroundColor: Colors.white, // White background
                 elevation: 4, // Small shadow for a subtle effect
                 child: Icon(

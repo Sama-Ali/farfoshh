@@ -24,6 +24,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
 
   addData() async {
     UserProvider userProvider = Provider.of(context, listen: false);
+    print("calling refresh user from response layout");
     await userProvider.refreshUser();
   }
 

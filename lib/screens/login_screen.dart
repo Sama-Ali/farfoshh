@@ -33,9 +33,13 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     // Call backend login method
+    // String res = await AuthMethod().loginUser(
+    //   email: _emailController.text,
+    //   password: _passwordController.text,
+    // );
     String res = await AuthMethod().loginUser(
-      email: _emailController.text,
-      password: _passwordController.text,
+      email: "test88@gmail.com",
+      password: "test88",
     );
     if (res == "!تم") {
       Navigator.of(context).pushReplacement(

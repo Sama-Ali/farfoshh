@@ -156,7 +156,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    // final UserProvider userProvider = Provider.of<UserProvider>(context);
+    // print("calling refresh user from add post");
+    // userProvider.refreshUser();
+    // User? userr = userProvider.getUser;
+    // print(userr);
+    print("************");
 
     return _file == null
         ? Center(
@@ -180,11 +185,17 @@ class _AddPostScreenState extends State<AddPostScreen> {
               centerTitle: false,
               actions: <Widget>[
                 TextButton(
-                    onPressed: () => postImage(
-                          userProvider.getUser.uid,
-                          userProvider.getUser.username,
-                          userProvider.getUser.photoUrl,
-                        ),
+                    onPressed:
+                        //  () => postImage(
+                        //       userProvider.getUser!.uid,
+                        //       userProvider.getUser!.username,
+                        //       userProvider.getUser!.photoUrl,
+                        //     ),
+                        () => postImage(
+                              "userProvider.getUser!.uid,",
+                              "userProvider.getUser!.username",
+                              "userProvider.getUser!.photoUrl",
+                            ),
                     child: const Text(
                       'نشر',
                       style: TextStyle(
@@ -208,7 +219,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   children: [
                     CircleAvatar(
                       backgroundImage: NetworkImage(
-                        userProvider.getUser.photoUrl,
+                        "userProvider.getUser!.photoUrl",
                       ),
                     ),
                     SizedBox(

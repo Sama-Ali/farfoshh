@@ -10,10 +10,16 @@ class UserProvider with ChangeNotifier {
   final AuthMethod _authMethod = AuthMethod();
 
   //getter
-  User get getUser => _user!;
+  // User get getUser => _user!;
+  User? get getUser {
+    print('UserProvider getUser called, user: $_user');
+    return _user;
+  }
 
   Future<void> refreshUser() async {
     User user = await _authMethod.getUserDetails();
+    print("setting the user from user provider refresh:");
+    print(user);
     _user = user;
     notifyListeners(); //update all listener
   }
