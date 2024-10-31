@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:farfoshmodi/models/user.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({Key? key}) : super(key: key);
+  final User? user;
+  AddPostScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   _AddPostScreenState createState() => _AddPostScreenState();
@@ -98,50 +99,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
   }
 
-  // try {
-  //     // upload to storage and db
-  //     String res = await FireStoreMethods().uploadPost(
-  //       _descriptionController.text,
-  //       _file!,
-  //       uid,
-  //       username,
-  //       profImage,
-  //     );
-  //     if (res == "!تم") {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //       if (context.mounted) {
-  //         showSnackBar(
-  //           'تم مشاركة المنشور',
-  //           context,
-  //         );
-  //       }
-  //       clearImage();
-  //     } else {
-  //       if (context.mounted) {
-  //         showSnackBar(res, context);
-  //       }
-  //     }
-  //   } catch (err) {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     showSnackBar(
-  //       err.toString(),
-  //       context,
-  //     );
-  //   }
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Ensure the provider is called when the screen is loaded
-  //   Future.microtask(
-  //       () => Provider.of<UserProvider>(context, listen: false).refreshUser());
-  // }
-
   void clearImage() {
     setState(() {
       _file = null;
@@ -157,14 +114,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     // final UserProvider userProvider = Provider.of<UserProvider>(context);
+    // final user = userProvider.getUser;
     // print("calling refresh user from add post");
     // userProvider.refreshUser();
     // User? userr = userProvider.getUser;
     // print(userr);
-    print("************");
-
+    print("");
+    print(this.widget.user);
     return _file == null
         ? Center(
+            // child: Text(this.widget.user?.username ?? "nooo user")
             child: IconButton(
               icon: const Icon(
                 Icons.upload,
@@ -185,17 +144,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
               centerTitle: false,
               actions: <Widget>[
                 TextButton(
-                    onPressed:
-                        //  () => postImage(
-                        //       userProvider.getUser!.uid,
-                        //       userProvider.getUser!.username,
-                        //       userProvider.getUser!.photoUrl,
-                        //     ),
-                        () => postImage(
-                              "userProvider.getUser!.uid,",
-                              "userProvider.getUser!.username",
-                              "userProvider.getUser!.photoUrl",
-                            ),
+                    onPressed: () => postImage(widget.user!.uid,
+                        widget.user!.username, widget.user!.photoUrl),
+                    // () => postImage(
+                    //       "userProvider.getUser!.uid,",
+                    //       "userProvider.getUser!.username",
+                    //       "userProvider.getUser!.photoUrl",
+                    //     ),
                     child: const Text(
                       'نشر',
                       style: TextStyle(

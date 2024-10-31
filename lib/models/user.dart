@@ -1,4 +1,5 @@
-//this file built for keep user ingfo
+//this file built for keep user info
+// scenario of display this in "add post screen" : userModel> userProvider> feedScreen pass user to "add post screen"
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {

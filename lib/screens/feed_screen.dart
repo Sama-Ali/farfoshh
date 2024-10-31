@@ -21,7 +21,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    print("**********in feedScreen");
+    print("**in feedScreen");
 
     return Scaffold(
       backgroundColor:
@@ -49,7 +49,7 @@ class _FeedScreenState extends State<FeedScreen> {
         children: [
           // for backend:
           StreamBuilder(
-            //StreamBuilder rebuild its UI with the new data
+            //StreamBuilder rebuild its UI with the new data, listens to the Firestore posts collection in real-time
             stream: FirebaseFirestore.instance
                 .collection('posts')
                 .snapshots(), //.snapshots() provide real time changes in 'post' collection
@@ -78,16 +78,17 @@ class _FeedScreenState extends State<FeedScreen> {
               height: 50, // Smaller height
               child: FloatingActionButton(
                 onPressed: () {
-                  // final UserProvider userProvider =
-                  //     Provider.of<UserProvider>(context);
+                  final userProvider =
+                      Provider.of<UserProvider>(context, listen: false);
+                  final user = userProvider.getUser;
                   print("in feedScreen");
                   // print(userProvider.getUser);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddPostScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => AddPostScreen(user: user)),
                   );
                 },
-                // Navigator.push(context, AddPostScreen())},
                 backgroundColor: Colors.white, // White background
                 elevation: 4, // Small shadow for a subtle effect
                 child: Icon(

@@ -1,6 +1,12 @@
+import 'package:farfoshmodi/Providers/user_provider.dart';
+import 'package:farfoshmodi/models/user.dart' as model;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:farfoshmodi/resources/firestore_method.dart';
+import 'package:farfoshmodi/Utils/global_variable.dart';
+import 'package:farfoshmodi/Utils/utils.dart';
+import 'package:provider/provider.dart';
 
 const webScreenSize = 600;
 const mobileBackgroundColor = Colors.white;
@@ -8,23 +14,58 @@ const webBackgroundColor = Colors.grey;
 const primaryColor = Colors.black;
 const secondaryColor = const Color.fromRGBO(160, 160, 160, 100);
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   final snap;
-  PostCard({
+  const PostCard({
     Key? key,
     required this.snap,
   }) : super(key: key);
 
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
   int commentLen = 0;
   bool isLikeAnimating = false;
 
-  // @override
-  // void initState() {
-  //   super.initState();
+  @override
+  void initState() {
+    super.initState();
+    // fetchCommentLen();
+  }
+
+  // fetchCommentLen() async {
+  //   try {
+  //     QuerySnapshot snap = await FirebaseFirestore.instance
+  //         .collection('posts')
+  //         .doc(widget.snap['postId'])
+  //         .collection('comments')
+  //         .get();
+  //     commentLen = snap.docs.length;
+  //   } catch (err) {
+  //     showSnackBar(
+  //       context,
+  //       err.toString(),
+  //     );
+  //   }
+  //   setState(() {});
+  // }
+
+  // deletePost(String postId) async {
+  //   try {
+  //     await FireStoreMethods().deletePost(postId);
+  //   } catch (err) {
+  //     showSnackBar(
+  //       context,
+  //       err.toString(),
+  //     );
+  //   }
   // }
 
   @override
   Widget build(BuildContext context) {
+    final model.User user = Provider.of<UserProvider>(context).getUser;
     final width = MediaQuery.of(context).size.width;
 
     return Container(
@@ -50,7 +91,9 @@ class PostCard extends StatelessWidget {
               children: <Widget>[
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage(snap['profImage']),
+                  backgroundImage: NetworkImage(
+                    widget.snap['profImage'].toString(),
+                  ),
                 ),
                 Expanded(
                   child: Padding(
@@ -62,7 +105,7 @@ class PostCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          snap['username'],
+                          widget.snap['username'].toString(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -71,35 +114,47 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      useRootNavigator: false,
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          child: ListView(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shrinkWrap: true,
-                              children: [
-                                'Delete',
-                              ]
-                                  .map(
-                                    (e) => InkWell(
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 12, horizontal: 16),
-                                          child: Text(e),
-                                        ),
-                                        onTap: () {}),
-                                  )
-                                  .toList()),
-                        );
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.more_vert),
-                )
+                widget.snap['uid'].toString() == user.uid
+                    ? IconButton(
+                        onPressed: () {
+                          showDialog(
+                            useRootNavigator: false,
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                child: ListView(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    shrinkWrap: true,
+                                    children: [
+                                      'حذف',
+                                    ]
+                                        .map(
+                                          (e) => InkWell(
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12,
+                                                        horizontal: 16),
+                                                child: Text(e),
+                                              ),
+                                              onTap: () {
+                                                // deletePost(
+                                                //   widget.snap['postId']
+                                                //       .toString(),
+                                                // );
+                                                //  remove the dialog box
+                                                // Navigator.of(context).pop();
+                                              }),
+                                        )
+                                        .toList()),
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      )
+                    : Container(),
               ],
             ),
           ),
@@ -108,7 +163,7 @@ class PostCard extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.35,
             width: double.infinity,
             child: Image.network(
-              snap['postUrl'],
+              widget.snap['postUrl'].toString(),
               fit: BoxFit.cover,
             ), // Image.network
           ), // Si
@@ -147,7 +202,7 @@ class PostCard extends StatelessWidget {
                         .titleSmall!
                         .copyWith(fontWeight: FontWeight.w800),
                     child: Text(
-                      '${snap['likes'].length} likes',
+                      '${widget.snap['likes'].length} إعجاب',
                       style: Theme.of(context).textTheme.bodyMedium,
                     )),
                 Container(
@@ -160,13 +215,13 @@ class PostCard extends StatelessWidget {
                       style: const TextStyle(color: primaryColor),
                       children: [
                         TextSpan(
-                          text: snap['username'],
+                          text: widget.snap['username'].toString(),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text: ' ${snap['description']}',
+                          text: ' ${widget.snap['وصف المنشور']}',
                         ),
                       ],
                     ),
@@ -176,7 +231,7 @@ class PostCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Text(
-                        'View all  comments',
+                        'مشاهدة التعليقات',
                         style: const TextStyle(
                           fontSize: 16,
                           color: secondaryColor,
@@ -188,7 +243,7 @@ class PostCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
                     DateFormat.yMMMd().format(
-                      snap['datePublished'].toDate(),
+                      widget.snap['datePublished'].toDate(),
                     ),
                     style: const TextStyle(
                       fontSize: 16,
