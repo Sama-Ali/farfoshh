@@ -52,6 +52,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               child: const Text("إلغاء"),
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.pop(context);
               },
             )
           ],
@@ -113,12 +114,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final UserProvider userProvider = Provider.of<UserProvider>(context);
-    // final user = userProvider.getUser;
-    // print("calling refresh user from add post");
-    // userProvider.refreshUser();
-    // User? userr = userProvider.getUser;
-    // print(userr);
     print("");
     print(this.widget.user);
     return _file == null
@@ -182,7 +177,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       child: TextField(
                         controller: _descriptionController,
                         decoration: const InputDecoration(
-                            hintText: "Write a caption...",
+                            hintText: "وصف المنشور....",
                             border: InputBorder.none),
                         maxLines: 8,
                       ),
