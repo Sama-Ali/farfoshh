@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:farfoshmodi/models/user.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({Key? key}) : super(key: key);
+  final User? user;
+  AddPostScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   _AddPostScreenState createState() => _AddPostScreenState();
@@ -50,6 +51,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               padding: const EdgeInsets.all(20),
               child: const Text("إلغاء"),
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
             )
@@ -157,12 +159,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     // final UserProvider userProvider = Provider.of<UserProvider>(context);
-    // print("calling refresh user from add post");
+    // final user = userProvider.getUser;
+    print("calling refresh user from add post");
     // userProvider.refreshUser();
     // User? userr = userProvider.getUser;
     // print(userr);
     print("************");
-
+    // print(this.widget.user);
     return _file == null
         ? Center(
             child: IconButton(
@@ -185,17 +188,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
               centerTitle: false,
               actions: <Widget>[
                 TextButton(
-                    onPressed:
-                        //  () => postImage(
-                        //       userProvider.getUser!.uid,
-                        //       userProvider.getUser!.username,
-                        //       userProvider.getUser!.photoUrl,
-                        //     ),
-                        () => postImage(
-                              "userProvider.getUser!.uid,",
-                              "userProvider.getUser!.username",
-                              "userProvider.getUser!.photoUrl",
-                            ),
+                    onPressed: () => postImage(
+                          widget.user!.uid,
+                          widget.user!.username,
+                          widget.user!.photoUrl,
+                        ),
+                    // () => postImage(
+                    //       "userProvider.getUser!.uid,",
+                    //       "userProvider.getUser!.username",
+                    //       "userProvider.getUser!.photoUrl",
+                    //     ),
                     child: const Text(
                       'نشر',
                       style: TextStyle(
@@ -219,7 +221,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   children: [
                     CircleAvatar(
                       backgroundImage: NetworkImage(
-                        "userProvider.getUser!.photoUrl",
+                        widget.user!.photoUrl,
                       ),
                     ),
                     SizedBox(

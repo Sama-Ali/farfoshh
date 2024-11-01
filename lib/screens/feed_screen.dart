@@ -78,13 +78,17 @@ class _FeedScreenState extends State<FeedScreen> {
               height: 50, // Smaller height
               child: FloatingActionButton(
                 onPressed: () {
+                  final userProvider =
+                      Provider.of<UserProvider>(context, listen: false);
+                  final user = userProvider.getUser;
                   // final UserProvider userProvider =
                   //     Provider.of<UserProvider>(context);
                   print("in feedScreen");
                   // print(userProvider.getUser);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddPostScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => AddPostScreen(user: user)),
                   );
                 },
                 // Navigator.push(context, AddPostScreen())},

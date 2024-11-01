@@ -18,6 +18,8 @@ class User {
     required this.photoUrl,
   });
 
+  get snap => null;
+
   // Convert user to a map (JSON format)
   Map<String, dynamic> toJson() => {
         'username': username,
